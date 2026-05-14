@@ -16,7 +16,7 @@ services:
       retries: 5
 
   backend:
-    build: ./backend/
+    image: ${DOCKERHUB_USERNAME}/kittygram_backend
     env_file: .env
     depends_on:
       db:
@@ -30,13 +30,13 @@ services:
              gunicorn kittygram_backend.wsgi:application --bind 0.0.0.0:8000"
 
   frontend:
-    build: ./frontend/
-    command: cp -r /app/build/. /static/
+    image: ${DOCKERHUB_USERNAME}/kittygram_frontend
     volumes:
       - static:/static
+    command: cp -r /app/build/. /static/
 
   gateway:
-    build: ./nginx/
+    image: ${DOCKERHUB_USERNAME}/kittygram_gateway
     depends_on:
       backend:
         condition: service_started
